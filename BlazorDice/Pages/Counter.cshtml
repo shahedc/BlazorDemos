@@ -1,6 +1,6 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
+<h1>Roll the Dice!</h1>
 
 
 <button class="btn btn-primary" onclick="@ResetDice">Reset Dice</button>
@@ -20,7 +20,7 @@
     string[] diceImage = new string[6];
     string dicePrefix = "/images/dice";
     string diceSuffix = ".png";
-    int currentImage = 0;
+    int currentImageIndex = 0; // dice0 = blank, dice1 through 6 .png
 
     protected override void OnInit()
     {
@@ -30,26 +30,31 @@
 
     void ResetDice()
     {
-        currentImage = 0;
-        foreach (int dice in diceArray)
+        currentImageIndex = 0;
+        foreach (int diceIndex in diceArray)
         {
-            var dicePath = dicePrefix + (currentImage + 1) + diceSuffix;
-            diceImage[currentImage] = dicePath;
-            currentImage++;
+            var dicePath = GetDicePath(currentImageIndex + 1);
+            diceImage[currentImageIndex] = dicePath;
+            currentImageIndex++;
         }
     }
 
     void RollDice()
     {
-        currentImage = 0;
+        currentImageIndex = 0;
         Random rnd = new Random();
         int[] randomDice = diceArray.OrderBy(x => rnd.Next()).ToArray();
 
         foreach (int randomPick in randomDice)
         {
-            var dicePath = dicePrefix + randomPick + diceSuffix;
-            diceImage[currentImage] = dicePath;
-            currentImage++;
+            var dicePath = GetDicePath(randomPick);
+            diceImage[currentImageIndex] = dicePath;
+            currentImageIndex++;
         }
+    }
+
+    string GetDicePath(int diceValue)
+    {
+        return $"{dicePrefix}{diceValue}{diceSuffix}";
     }
 }
