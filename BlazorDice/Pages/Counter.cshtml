@@ -2,15 +2,54 @@
 
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" onclick="@IncrementCount">Click me</button>
+<button class="btn btn-primary" onclick="@ResetDice">Reset Dice</button>
+<button class="btn btn-primary" onclick="@RollDice">Roll Dice</button>
+<br />
+<div>
+    <img id="dice0" src="@diceImage[0]" />
+    <img id="dice1" src="@diceImage[1]" />
+    <img id="dice2" src="@diceImage[2]" />
+    <img id="dice3" src="@diceImage[3]" />
+    <img id="dice4" src="@diceImage[4]" />
+    <img id="dice5" src="@diceImage[5]" />
+</div>
 
 @functions {
-    int currentCount = 0;
+    int[] diceArray = new int[6] { 1, 2, 3, 4, 5, 6 };
+    string[] diceImage = new string[6];
+    string dicePrefix = "/images/dice";
+    string diceSuffix = ".png";
+    int currentImage = 0;
 
-    void IncrementCount()
+    protected override void OnInit()
     {
-        currentCount++;
+        ResetDice();
+    }
+
+
+    void ResetDice()
+    {
+        currentImage = 0;
+        foreach (int dice in diceArray)
+        {
+            var dicePath = dicePrefix + (currentImage + 1) + diceSuffix;
+            diceImage[currentImage] = dicePath;
+            currentImage++;
+        }
+    }
+
+    void RollDice()
+    {
+        currentImage = 0;
+        Random rnd = new Random();
+        int[] randomDice = diceArray.OrderBy(x => rnd.Next()).ToArray();
+
+        foreach (int randomPick in randomDice)
+        {
+            var dicePath = dicePrefix + randomPick + diceSuffix;
+            diceImage[currentImage] = dicePath;
+            currentImage++;
+        }
     }
 }
