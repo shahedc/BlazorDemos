@@ -16,11 +16,10 @@
 </div>
 
 @functions {
-    int[] diceArray = new int[6] { 1, 2, 3, 4, 5, 6 };
+    int[] diceArray = new int[] { 1, 2, 3, 4, 5, 6 };
     string[] diceImage = new string[6];
     string dicePrefix = "/images/dice";
     string diceSuffix = ".png";
-    int currentImageIndex = 0; // dice0 = blank, dice1 through 6 .png
 
     protected override void OnInit()
     {
@@ -30,26 +29,20 @@
 
     void ResetDice()
     {
-        currentImageIndex = 0;
-        foreach (int diceIndex in diceArray)
+        for (int diceIndex = 0; diceIndex < diceArray.Length; diceIndex++)
         {
-            var dicePath = GetDicePath(currentImageIndex + 1);
-            diceImage[currentImageIndex] = dicePath;
-            currentImageIndex++;
+            diceImage[diceIndex] = GetDicePath(diceIndex + 1);
         }
     }
 
     void RollDice()
     {
-        currentImageIndex = 0;
         Random rnd = new Random();
         int[] randomDice = diceArray.OrderBy(x => rnd.Next()).ToArray();
 
-        foreach (int randomPick in randomDice)
+        for (int diceIndex = 0; diceIndex < diceArray.Length; diceIndex++)
         {
-            var dicePath = GetDicePath(randomPick);
-            diceImage[currentImageIndex] = dicePath;
-            currentImageIndex++;
+            diceImage[diceIndex] = GetDicePath(randomDice[diceIndex]);
         }
     }
 
